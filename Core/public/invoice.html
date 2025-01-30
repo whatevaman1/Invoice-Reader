@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Invoice</title>
+  <style>
+    /* Global Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(120deg, #DDFFD9, #748067); /* Light background for the page */
+      color: #1e293b; /* Professional dark gray text */
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #102a43;
+      margin: 15px 0;
+    }
+
+    /* Form Container */
+    form {
+      background: #ffffff; /* Light background for form */
+      color: #1e293b; /* Dark text for contrast */
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1); /* Clean shadow for form */
+      max-width: 600px;
+      margin: 30px auto; /* Center the form with margin */
+      border: 1px solid #c1d1c5;
+      box-sizing: border-box; /* Ensure padding doesn't overflow */
+    }
+
+    /* Form Labels */
+    label {
+      font-weight: 600;
+      display: block;
+      margin: 15px 0 5px; /* Add spacing for better layout */
+      color: #374151; /* Neutral gray text color */
+    }
+
+    /* Inputs and Textareas */
+    input, textarea {
+      width: calc(100% - 20px); /* Adjust to prevent overflow */
+      padding: 12px 15px;
+      border: 1px solid #D1D5DB;
+      border-radius: 8px;
+      font-size: 1rem;
+      background-color: #ffffff; /* White background for text boxes */
+      color: #1e293b;
+      margin-bottom: 10px; /* Add more spacing to prevent overlap */
+      transition: all 0.3s ease;
+      box-sizing: border-box; /* Ensure padding doesn't overflow */
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #748067; /* Highlight border on focus */
+      box-shadow: 0 0 0 3px rgba(116, 128, 103, 0.3); /* Subtle glow */
+    }
+
+    textarea {
+      resize: vertical; /* Allow vertical resizing only */
+      min-height: 80px; /* Ensure a good starting height */
+    }
+
+    /* Submit Button */
+    button {
+      width: 100%;
+      padding: 14px;
+      background-color: #1D6F42; /* Olive green button */
+      color: #ffffff;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 10px; /* Add space above button */
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #6B8E23; /* Lighter olive on hover */
+      box-shadow: 0 4px 12px rgba(107, 142, 35, 0.3); /* Hover shadow */
+    }
+
+    /* Status Message */
+    #status {
+      margin-top: 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    #status.success {
+      color: #16a34a; /* Success green */
+    }
+
+    #status.error {
+      color: #dc2626; /* Error red */
+    }
+  </style>
+</head>
+<body>
+  <h1>CREATE AN INVOICE</h1>
+  <form id="invoiceForm">
+    <label for="from">From:</label>
+    <input type="text" id="from" name="from" placeholder="Your name or company" required>
+
+    <label for="to">To:</label>
+    <input type="text" id="to" name="to" placeholder="Recipient's name or company" required>
+
+    <label for="total">Total:</label>
+    <input type="number" id="total" name="total" placeholder="Invoice amount" step="1" required>
+
+    <label for="tax">Tax (%):</label>
+    <input type="number" id="tax" name="tax" placeholder="Applicable tax rate" step="0.1" required>
+
+    <label for="notes">Additional Notes:</label>
+    <textarea id="notes" name="notes" rows="2" placeholder="Add any additional details..."></textarea>
+
+    <button type="submit">Save Invoice</button>
+  </form>
+
+  <p id="status"></p>
+
+  <script>
+    document.getElementById('invoiceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const formData = {
+        from: document.getElementById('from').value,
+        to: document.getElementById('to').value,
+        total: document.getElementById('total').value,
+        tax: document.getElementById('tax').value,
+        notes: document.getElementById('notes').value,
+      };
+
+      const response = await fetch('/save-invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      const status = document.getElementById('status');
+
+      if (response.ok) {
+        status.textContent = 'Invoice saved successfully!';
+        status.className = 'success';
+      } else {
+        status.textContent = 'Failed to save invoice: ' + result.error;
+        status.className = 'error';
+      }
+    });
+  </script>
+</body>
+</html>
