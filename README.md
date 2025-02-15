@@ -54,12 +54,7 @@ Contributions are welcome! To contribute:
 3. Commit your changes.
 4. Push to your fork and create a pull request.
 
-## License
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
 ## Contact
 For queries or contributions, contact [amans11221@gmail.com] or visit the GitHub repository.
 
----
-This README provides an overview of the Invoice Reader project. Feel free to modify it as needed!
 
